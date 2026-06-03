@@ -133,6 +133,7 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
     <span id="sync-status"></span>
     <span id="hdr-count"></span>
     <button class="sync-btn" onclick="loadDeals()">&#8635; Sync</button>
+    <button class="sync-btn" onclick="showSetup()" title="Settings">&#9881;</button>
   </div>
 </header>
 
@@ -235,6 +236,13 @@ var CACHE_KEY = 'sw_cache_v3';
 var CHIP = {capital:'chip-capital',transaction:'chip-transaction',leasing:'chip-leasing',relationship:'chip-relationship',commodity:'chip-commodity'};
 var LBL  = {capital:'Capital',transaction:'Transaction',leasing:'Leasing',relationship:'Relationship',commodity:'Commodity'};
 var deals = [], filter = 'all', search = '', editId = null, detailId = null;
+
+function fmtDate(d){
+  if(!d) return '';
+  var dt = new Date(d);
+  if(isNaN(dt)) return String(d);
+  return dt.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+}
 var SCRIPT_URL = localStorage.getItem(URL_KEY) || '';
 
 function normS(s){
@@ -256,6 +264,13 @@ function normDeals(arr){
     return {id:d.id,title:d.title,sub:d.sub,status:normS(d.status),type:normT(d.type),
             contact:d.contact,summary:d.summary,next:d.next,date:d.date,notes:d.notes};
   });
+}
+
+function showSetup(){
+  document.getElementById('setup-banner').classList.remove('hidden');
+  document.getElementById('url-input').value = SCRIPT_URL || '';
+  document.getElementById('url-input').focus();
+  window.scrollTo(0,0);
 }
 
 window.onload = function(){
@@ -378,7 +393,7 @@ function render(){
       '<div class="card-title">' + (d.title||'') + '</div>' +
       '<div class="card-sub">'  + (d.sub||d.contact||'') + '</div>' +
       '<div class="card-next">' + (d.next||'') + '</div>' +
-      '<div class="card-date">Last activity: ' + (d.date||'') + '</div>';
+      '<div class="card-date">Last activity: ' + fmtDate(d.date) + '</div>';
     (function(id){
       el.querySelector('.edt-btn').addEventListener('click',function(ev){ev.stopPropagation();openEdit(id);});
       el.querySelector('.del-btn').addEventListener('click',function(ev){ev.stopPropagation();doDelete(id);});
@@ -400,7 +415,7 @@ function openDetail(id){
   document.getElementById('d-contact').textContent=d.contact||'—';
   document.getElementById('d-summary').textContent=d.summary||'—';
   document.getElementById('d-next').textContent=d.next||'—';
-  document.getElementById('d-date').textContent=d.date||'—';
+  document.getElementById('d-date').textContent=fmtDate(d.date)||'—';
   document.getElementById('d-notes').textContent=d.notes||'—';
   openOv('detailOverlay');
 }
