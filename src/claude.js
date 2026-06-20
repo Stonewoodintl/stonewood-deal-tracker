@@ -150,9 +150,19 @@ If they say yes to having an agent:
 // should NOT be trusted to "remember" or guess inventory state on its own.
 //
 // listings = the array of rows already parsed from the CSV by listings.js
-// Each row is expected to have: city, status, budgetMin, budgetMax
-// (per the column structure documented in the skill: status = col 13,
-// budgetMin/budgetMax = cols 11-12)
+// Real "DFW Restaurant Space Database" sheet headers (confirmed from live export,
+// Sheet ID 11nG0lIfDoQzRqnzaI8EDbMCiHCzTucafoalwffhW4Js):
+//   City          — city name
+//   Budget_Min    — minimum monthly budget (number)
+//   Budget_Max    — maximum monthly budget (number)
+//   Status        — listing pipeline status: "ACTIVE" | "PENDING" | "EXPIRED" | "DO NOT DISTURB"
+//
+// CRITICAL: the raw CSV has TWO columns both visually labeled "Status" — one holds
+// physical vacancy ("Vacant" / "Active Tenant"), the other holds the listing pipeline
+// status used here. listings.js MUST resolve this by column POSITION (col 13, 0-indexed
+// col 12), not by header text, or a duplicate-header CSV parser may silently grab the
+// wrong one. matchInventory() assumes listings.js has already done that and exposes
+// the pipeline status as row.Status.
 //
 // budgetInput = raw string from the lead's answer to the budget question,
 // e.g. "5k to 10k", "$4,800", "4000-5000"
@@ -197,14 +207,16 @@ function matchInventory(leadCity, budgetInput, listings) {
   }
 
   const matched = listings.some((row) => {
-    if (!row || row.status !== "ACTIVE") return false;
-    if (normalizeCity(row.city) !== targetCity) return false;
+    // row.Status = pipeline status (ACTIVE/PENDING/EXPIRED/DO NOT DISTURB)
+    // resolved from col 13 by listings.js — NOT the vacancy status column
+    if (!row || row.Status !== "ACTIVE") return false;
+    if (normalizeCity(row.City) !== targetCity) return false;
 
     // If we couldn't parse a budget at all, match on city only
     if (budgetMin === null || budgetMax === null) return true;
 
-    const rowMin = Number(row.budgetMin);
-    const rowMax = Number(row.budgetMax);
+    const rowMin = Number(row.Budget_Min);
+    const rowMax = Number(row.Budget_Max);
     if (Number.isNaN(rowMin) || Number.isNaN(rowMax)) return true;
 
     // Overlap check: lead's range and listing's range intersect at all

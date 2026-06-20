@@ -118,21 +118,31 @@ assert("'2 thousand'",   parseBudgetRange("2 thousand"),   { min: 2000,  max: 20
 assert("empty string",   parseBudgetRange(""),             { min: null,  max: null  });
 assert("null",           parseBudgetRange(null),           { min: null,  max: null  });
 
-console.log("\n=== TEST 9: matchInventory ===");
+console.log("\n=== TEST 9: matchInventory (real sheet field names: City, Status, Budget_Min, Budget_Max) ===");
+// Fixtures use real sheet header names confirmed from live export of
+// Sheet ID 11nG0lIfDoQzRqnzaI8EDbMCiHCzTucafoalwffhW4Js.
+// listings.js must resolve the dual-Status column ambiguity by col position
+// (col 13) and expose the pipeline status as row.Status before calling here.
 const listings = [
-  { city: "Plano",        status: "ACTIVE",   budgetMin: 4000,  budgetMax: 6000  },
-  { city: "Plano",        status: "INACTIVE", budgetMin: 3000,  budgetMax: 5000  },
-  { city: "Frisco",       status: "ACTIVE",   budgetMin: 7000,  budgetMax: 10000 },
-  { city: "Dallas, TX",   status: "ACTIVE",   budgetMin: 5000,  budgetMax: 8000  },
+  { City: "Plano",        Status: "ACTIVE",   Budget_Min: 4000,  Budget_Max: 6000  },
+  { City: "Plano",        Status: "INACTIVE", Budget_Min: 3000,  Budget_Max: 5000  },
+  { City: "Frisco",       Status: "ACTIVE",   Budget_Min: 7000,  Budget_Max: 10000 },
+  { City: "Dallas, TX",   Status: "ACTIVE",   Budget_Min: 5000,  Budget_Max: 8000  },
+  // SRD-10 regression: Irving Cypress Waters, PENDING — must NOT produce a match
+  // even though city + budget numerically overlap ($5K-$10K ask vs $5K-$8K listing)
+  { City: "Irving",       Status: "PENDING",  Budget_Min: 5000,  Budget_Max: 8000  },
 ];
-assert("Plano $5k match",         matchInventory("Plano",       "5k",          listings), { matched: true,  city: "Plano"       });
-assert("Plano INACTIVE skipped",  matchInventory("Plano",       "4k",          listings), { matched: true,  city: "Plano"       });
-assert("Plano $10k no overlap",   matchInventory("Plano",       "$10,000",     listings), { matched: false, city: "Plano"       });
-assert("Dallas TX normalized",    matchInventory("Dallas, TX",  "6k",          listings), { matched: true,  city: "Dallas, TX"  });
-assert("Frisco match",            matchInventory("Frisco",      "8k to 10k",   listings), { matched: true,  city: "Frisco"      });
-assert("Allen no listing",        matchInventory("Allen",       "5k",          listings), { matched: false, city: "Allen"       });
-assert("empty listings → false",  matchInventory("Plano",       "5k",          []),       { matched: false, city: "Plano"       });
-assert("no city → false",         matchInventory("",            "5k",          listings), { matched: false, city: ""            });
+assert("Plano $5k match",              matchInventory("Plano",       "5k",          listings), { matched: true,  city: "Plano"       });
+assert("Plano non-ACTIVE skipped",     matchInventory("Plano",       "4k",          listings), { matched: true,  city: "Plano"       });
+assert("Plano $10k no overlap",        matchInventory("Plano",       "$10,000",     listings), { matched: false, city: "Plano"       });
+assert("Dallas TX normalized",         matchInventory("Dallas, TX",  "6k",          listings), { matched: true,  city: "Dallas, TX"  });
+assert("Frisco match",                 matchInventory("Frisco",      "8k to 10k",   listings), { matched: true,  city: "Frisco"      });
+assert("Allen no listing",             matchInventory("Allen",       "5k",          listings), { matched: false, city: "Allen"       });
+assert("empty listings → false",       matchInventory("Plano",       "5k",          []),       { matched: false, city: "Plano"       });
+assert("no city → false",              matchInventory("",            "5k",          listings), { matched: false, city: ""            });
+// SRD-10 regression: PENDING must never match regardless of city+budget overlap
+assert("SRD-10 Irving PENDING no match", matchInventory("Irving",    "$5k to $10k", listings), { matched: false, city: "Irving"      });
+assert("SRD-10 Irving lower budget",     matchInventory("Irving",    "6k",          listings), { matched: false, city: "Irving"      });
 
 // ============================================================================
 // SUMMARY
