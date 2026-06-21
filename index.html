@@ -17,7 +17,6 @@
   --next-bg:#f1f5fa;--next-fg:#2a3f58
 }
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px}
-/* HEADER */
 header{background:var(--navy);height:54px;display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.3)}
 .brand-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff}
 .brand-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
@@ -26,7 +25,6 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
 #sync-status{font-size:10px;color:rgba(255,255,255,.4)}
 .sync-btn{padding:5px 12px;border-radius:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
 .sync-btn:hover{background:rgba(255,255,255,.2);color:#fff}
-/* SETUP BANNER */
 #setup-banner{background:var(--navy2);border-bottom:2px solid var(--gold);padding:14px 24px}
 #setup-banner.hidden{display:none}
 #setup-banner h3{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:6px}
@@ -36,7 +34,6 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
 .setup-input::placeholder{color:rgba(255,255,255,.3)}
 .setup-input:focus{border-color:var(--gold)}
 .setup-save{padding:8px 18px;border-radius:7px;background:var(--gold);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
-/* FILTER BAR */
 .filterbar{background:var(--white);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .pill{padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);background:transparent;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--sub);cursor:pointer;transition:all .14s;white-space:nowrap}
 .pill:hover{border-color:var(--navy);color:var(--navy)}
@@ -45,9 +42,7 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
 .search-icon{position:absolute;left:10px;color:var(--muted);pointer-events:none}
 .search-input{padding:7px 12px 7px 32px;border-radius:8px;border:1.5px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;color:var(--text);width:200px;outline:none;background:var(--bg)}
 .search-input:focus{border-color:var(--navy);background:#fff}
-/* BOARD */
 .board{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:18px 24px 48px}
-/* COLUMNS */
 .col{border-radius:10px;border:1px solid;padding:14px 12px 12px;display:flex;flex-direction:column;gap:8px;min-height:300px}
 .col-urgent{background:var(--red-bg);border-color:var(--red-bd)}
 .col-active{background:var(--amb-bg);border-color:var(--amb-bd)}
@@ -62,7 +57,6 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
 .badge-urgent{background:var(--red)}
 .badge-active{background:var(--amber)}
 .badge-cold{background:var(--slate)}
-/* CARDS */
 .card{background:var(--white);border-radius:8px;padding:13px 13px 11px 16px;border-left:3.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer;transition:box-shadow .14s,transform .12s}
 .card:hover{box-shadow:0 6px 20px rgba(0,0,0,.11);transform:translateY(-1px)}
 .card.urgent{border-left-color:var(--red)}
@@ -91,7 +85,6 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
 .state-msg p.err{color:var(--red)}
 .add-btn{margin-top:auto;width:100%;padding:9px;border:1.5px dashed #c8d3de;border-radius:7px;background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .14s}
 .add-btn:hover{border-color:var(--navy);color:var(--navy);background:rgba(255,255,255,.7)}
-/* MODALS */
 .overlay{display:none;position:fixed;inset:0;background:rgba(15,22,38,.55);backdrop-filter:blur(4px);z-index:300;align-items:center;justify-content:center}
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:14px;width:540px;max-width:95vw;max-height:88vh;overflow-y:auto;padding:28px;box-shadow:0 32px 80px rgba(0,0,0,.22);animation:popIn .18s ease}
@@ -125,7 +118,6 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
 </style>
 </head>
 <body>
-
 <header>
   <span class="brand-name">Stonewood International</span>
   <span class="brand-tag">Deal Tracker</span>
@@ -136,8 +128,7 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
     <button class="sync-btn" onclick="showSetup()" title="Settings">&#9881;</button>
   </div>
 </header>
-
-<div id="setup-banner">
+<div id="setup-banner" class="hidden">
   <h3>Connect Your Google Sheet</h3>
   <p>Paste your Apps Script Web App URL below. Every add, edit, and delete syncs directly to your Sheet.</p>
   <div class="setup-row">
@@ -145,7 +136,6 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
     <button class="setup-save" onclick="connectSheet()">Connect</button>
   </div>
 </div>
-
 <div class="filterbar">
   <button class="pill active" onclick="setFilter('all',this)">All</button>
   <button class="pill" onclick="setFilter('capital',this)">Capital</button>
@@ -158,7 +148,6 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
     <input class="search-input" type="text" placeholder="Search deals..." oninput="setSearch(this.value)">
   </div>
 </div>
-
 <div class="board">
   <div class="col col-urgent">
     <div class="col-hdr"><div class="col-dot dot-urgent"></div><span class="col-label">Action Required</span><span class="col-badge badge-urgent" id="cnt-urgent">—</span></div>
@@ -176,7 +165,6 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
     <button class="add-btn" onclick="openAdd('cold')">+ Add Deal</button>
   </div>
 </div>
-
 <!-- DETAIL MODAL -->
 <div class="overlay" id="detailOverlay" onclick="bgClose(event,'detailOverlay')">
   <div class="modal">
@@ -195,7 +183,6 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
     </div>
   </div>
 </div>
-
 <!-- FORM MODAL -->
 <div class="overlay" id="formOverlay" onclick="bgClose(event,'formOverlay')">
   <div class="modal">
@@ -227,24 +214,22 @@ header{background:var(--navy);height:54px;display:flex;align-items:center;paddin
     </div>
   </div>
 </div>
-
 <div id="toast"></div>
-
 <script>
 var URL_KEY   = 'sw_url_v3';
 var CACHE_KEY = 'sw_cache_v3';
+// URL pre-loaded — no setup required
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyhW_VbPbexarPgr0XRq4QdVU2eBl9a96YszQ7SMoZNe9zZthIBpfsaiwCU3dxqHviVuQ/exec';
+localStorage.setItem(URL_KEY, SCRIPT_URL);
 var CHIP = {capital:'chip-capital',transaction:'chip-transaction',leasing:'chip-leasing',relationship:'chip-relationship',commodity:'chip-commodity'};
 var LBL  = {capital:'Capital',transaction:'Transaction',leasing:'Leasing',relationship:'Relationship',commodity:'Commodity'};
 var deals = [], filter = 'all', search = '', editId = null, detailId = null;
-
 function fmtDate(d){
   if(!d) return '';
   var dt = new Date(d);
   if(isNaN(dt)) return String(d);
   return dt.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
 }
-var SCRIPT_URL = localStorage.getItem(URL_KEY) || '';
-
 function normS(s){
   s = String(s||'').toLowerCase().replace(/[^a-z]/g,' ');
   if(s.indexOf('urgent')>=0||s.indexOf('action')>=0||s.indexOf('required')>=0) return 'urgent';
@@ -265,21 +250,17 @@ function normDeals(arr){
             contact:d.contact,summary:d.summary,next:d.next,date:d.date,notes:d.notes};
   });
 }
-
 function showSetup(){
   document.getElementById('setup-banner').classList.remove('hidden');
   document.getElementById('url-input').value = SCRIPT_URL || '';
   document.getElementById('url-input').focus();
   window.scrollTo(0,0);
 }
-
 window.onload = function(){
-  if(SCRIPT_URL){ document.getElementById('setup-banner').classList.add('hidden'); }
+  document.getElementById('setup-banner').classList.add('hidden');
   try{ var c=localStorage.getItem(CACHE_KEY); if(c){deals=normDeals(JSON.parse(c));render();} }catch(e){}
-  if(SCRIPT_URL) loadDeals();
-  else showLoading();
+  loadDeals();
 };
-
 function connectSheet(){
   var url = document.getElementById('url-input').value.trim();
   if(url.indexOf('script.google.com')<0){ toast('Paste a valid Apps Script URL'); return; }
@@ -289,9 +270,7 @@ function connectSheet(){
   toast('Connecting...');
   loadDeals();
 }
-
 function apiCall(params, method, body){
-  if(!SCRIPT_URL){ toast('Connect your Google Sheet first'); return Promise.resolve(null); }
   setSyncStatus('syncing');
   var url = SCRIPT_URL + '?' + new URLSearchParams(params).toString();
   var opts = method === 'POST'
@@ -302,7 +281,6 @@ function apiCall(params, method, body){
     .then(function(data){ setSyncStatus('synced'); return data; })
     .catch(function(err){ setSyncStatus('error'); toast('Connection error — check URL'); return null; });
 }
-
 function loadDeals(){
   showLoading();
   setSyncBtn(true);
@@ -315,7 +293,6 @@ function loadDeals(){
     toast('Synced with Google Sheet');
   });
 }
-
 function saveDeal(){
   var title = document.getElementById('f-title').value.trim();
   if(!title){ toast('Deal name is required'); return; }
@@ -342,7 +319,6 @@ function saveDeal(){
     loadDeals();
   });
 }
-
 function doDelete(id){
   var d = deals.find(function(x){ return x.id===id; });
   if(!d) return;
@@ -354,7 +330,6 @@ function doDelete(id){
     toast('Deal deleted');
   });
 }
-
 function showLoading(){
   ['urgent','active','cold'].forEach(function(s){
     document.getElementById('col-'+s).innerHTML='<div class="state-msg"><div class="spinner"></div><p>Loading from Sheet...</p></div>';
@@ -365,7 +340,6 @@ function showError(){
     document.getElementById('col-'+s).innerHTML='<div class="state-msg"><p class="err">Could not load deals.<br>Check your URL &amp; deployment.</p></div>';
   });
 }
-
 function render(){
   ['urgent','active','cold'].forEach(function(s){ document.getElementById('col-'+s).innerHTML=''; });
   var c = {urgent:0,active:0,cold:0};
@@ -404,7 +378,6 @@ function render(){
   ['urgent','active','cold'].forEach(function(s){ document.getElementById('cnt-'+s).textContent=c[s]||0; });
   document.getElementById('hdr-count').textContent=deals.length+' deal'+(deals.length!==1?'s':'');
 }
-
 function openDetail(id){
   var d=deals.find(function(x){return x.id===id;}); if(!d)return; detailId=id;
   document.getElementById('d-title').textContent=d.title;
@@ -421,7 +394,6 @@ function openDetail(id){
 }
 function editFromDetail(){ closeOv('detailOverlay'); setTimeout(function(){openEdit(detailId);},130); }
 function deleteFromDetail(){ doDelete(detailId); }
-
 function openAdd(status){
   editId=null;
   document.getElementById('f-heading').textContent='Add New Deal';
@@ -442,7 +414,6 @@ function openEdit(id){
   document.getElementById('f-notes').value=d.notes||'';
   openOv('formOverlay');
 }
-
 function setFilter(f,btn){filter=f;document.querySelectorAll('.pill').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');render();}
 function setSearch(v){search=v.toLowerCase().trim();render();}
 function openOv(id){document.getElementById(id).classList.add('open');}
